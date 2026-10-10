@@ -1,6 +1,6 @@
 // Copyright 2023-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 package org.citra.citra_emu.features.settings.ui
 
@@ -19,7 +19,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.preference.PreferenceManager
 import com.google.android.material.color.MaterialColors
 import java.io.IOException
 import org.citra.citra_emu.CitraApplication
@@ -33,6 +32,7 @@ import org.citra.citra_emu.features.settings.model.ScaledFloatSetting
 import org.citra.citra_emu.features.settings.model.Settings
 import org.citra.citra_emu.features.settings.model.SettingsViewModel
 import org.citra.citra_emu.features.settings.model.StringSetting
+import org.citra.citra_emu.features.settings.model.view.InputBindingSetting
 import org.citra.citra_emu.features.settings.utils.SettingsFile
 import org.citra.citra_emu.utils.DirectoryInitialization
 import org.citra.citra_emu.utils.InsetsHelper
@@ -205,12 +205,7 @@ class SettingsActivity :
         // Prevents saving to a non-existent settings file
         presenter.onSettingsReset()
 
-        val controllerKeys = Settings.buttonKeys + Settings.circlePadKeys + Settings.cStickKeys +
-            Settings.dPadAxisKeys + Settings.dPadButtonKeys + Settings.triggerKeys
-        val editor =
-            PreferenceManager.getDefaultSharedPreferences(CitraApplication.appContext).edit()
-        controllerKeys.forEach { editor.remove(it) }
-        editor.apply()
+        InputBindingSetting.clearAllBindings()
 
         // Reset the static memory representation of each setting
         BooleanSetting.clear()
