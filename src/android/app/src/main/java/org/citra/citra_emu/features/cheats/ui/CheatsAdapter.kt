@@ -1,6 +1,6 @@
 // Copyright 2023-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 package org.citra.citra_emu.features.cheats.ui
 
@@ -27,7 +27,7 @@ class CheatsAdapter(
     }
 
     override fun onBindViewHolder(holder: CheatViewHolder, position: Int) =
-        holder.bind(activity, viewModel.cheats[position], position)
+        holder.bind(activity, viewModel.cheats[position])
 
     override fun getItemCount(): Int = viewModel.cheats.size
 
@@ -46,12 +46,10 @@ class CheatsAdapter(
         CompoundButton.OnCheckedChangeListener {
         private lateinit var viewModel: CheatsViewModel
         private lateinit var cheat: Cheat
-        private var position = 0
 
-        fun bind(activity: FragmentActivity, cheat: Cheat, position: Int) {
+        fun bind(activity: FragmentActivity, cheat: Cheat) {
             viewModel = ViewModelProvider(activity)[CheatsViewModel::class.java]
             this.cheat = cheat
-            this.position = position
             binding.textName.text = this.cheat.getName()
             binding.cheatSwitch.isChecked = this.cheat.getEnabled()
             binding.cheatContainer.setOnClickListener(this)
@@ -59,12 +57,16 @@ class CheatsAdapter(
         }
 
         override fun onClick(root: View) {
-            viewModel.setSelectedCheat(cheat, position)
+            val position = bindingAdapterPosition
+            if (position !in viewModel.cheats.indices) return
+            viewModel.setSelectedCheat(viewModel.cheats[position], position)
             viewModel.openDetailsView()
         }
 
         override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
-            cheat.setEnabled(isChecked)
+            val position = bindingAdapterPosition
+            if (position !in viewModel.cheats.indices) return
+            viewModel.cheats[position].setEnabled(isChecked)
         }
     }
 }
