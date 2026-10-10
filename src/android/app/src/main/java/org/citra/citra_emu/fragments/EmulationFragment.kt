@@ -1,6 +1,6 @@
 // Copyright 2023-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 package org.citra.citra_emu.fragments
 
@@ -307,23 +307,7 @@ class EmulationFragment :
         binding.inGameMenu.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_emulation_pause -> {
-                    if (emulationState.isPaused) {
-                        emulationState.unpause()
-                        it.title = resources.getString(R.string.pause_emulation)
-                        it.icon = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.ic_pause,
-                            requireContext().theme
-                        )
-                    } else {
-                        emulationState.pause()
-                        it.title = resources.getString(R.string.resume_emulation)
-                        it.icon = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.ic_play,
-                            requireContext().theme
-                        )
-                    }
+                    togglePause()
                     true
                 }
 
@@ -520,10 +504,23 @@ class EmulationFragment :
     fun isDrawerOpen(): Boolean = binding.drawerLayout.isOpen
 
     private fun togglePause() {
+        val menuItem = binding.inGameMenu.menu.findItem(R.id.menu_emulation_pause)
         if (emulationState.isPaused) {
             emulationState.unpause()
+            menuItem?.title = resources.getString(R.string.pause_emulation)
+            menuItem?.icon = ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.ic_pause,
+                requireContext().theme
+            )
         } else {
             emulationState.pause()
+            menuItem?.title = resources.getString(R.string.resume_emulation)
+            menuItem?.icon = ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.ic_play,
+                requireContext().theme
+            )
         }
     }
 
