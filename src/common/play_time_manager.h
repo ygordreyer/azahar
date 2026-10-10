@@ -1,6 +1,6 @@
-// Copyright 2025 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Copyright 2025-2026 Citra Emulator Project / Azahar Emulator Project
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 #pragma once
 
@@ -24,6 +24,7 @@ public:
     PlayTimeManager(const PlayTimeManager&) = delete;
     PlayTimeManager& operator=(const PlayTimeManager&) = delete;
 
+    void Reload();
     u64 GetPlayTime(u64 program_id) const;
     void ResetProgramPlayTime(u64 program_id);
     void SetProgramId(u64 program_id);
