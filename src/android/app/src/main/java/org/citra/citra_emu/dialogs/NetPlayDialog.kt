@@ -1,6 +1,6 @@
 // Copyright 2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 // Copyright 2024 Mandarine Project
 // Licensed under GPLv2 or any later version
@@ -405,7 +405,7 @@ class NetPlayDialog(context: Context) : BottomSheetDialog(context) {
             val portStr = binding.ipPort.text.toString()
             val preferedGame = preferredGameList[selectedPreferredGame]
             val password = binding.password.text.toString()
-            val port = portStr.toIntOrNull() ?: run {
+            val port = portStr.toIntOrNull()?.takeIf { it in 0..65535 } ?: run {
                 Toast.makeText(activity, R.string.multiplayer_port_invalid, Toast.LENGTH_LONG)
                     .show()
                 binding.btnConfirm.isEnabled = true
