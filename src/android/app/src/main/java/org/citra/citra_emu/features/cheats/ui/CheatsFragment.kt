@@ -154,7 +154,7 @@ class CheatsFragment :
 
     private fun onIsEditingChanged(isEditing: Boolean) {
         if (isEditing) {
-            binding.slidingPaneLayout.lockMode = SlidingPaneLayout.LOCK_MODE_UNLOCKED
+            binding.slidingPaneLayout.lockMode = SlidingPaneLayout.LOCK_MODE_LOCKED_OPEN
         }
     }
 
@@ -164,7 +164,7 @@ class CheatsFragment :
             binding.slidingPaneLayout.close()
         }
         binding.slidingPaneLayout.lockMode = if (cheatSelected) {
-            SlidingPaneLayout.LOCK_MODE_UNLOCKED
+            SlidingPaneLayout.LOCK_MODE_LOCKED_OPEN
         } else {
             SlidingPaneLayout.LOCK_MODE_LOCKED_CLOSED
         }
