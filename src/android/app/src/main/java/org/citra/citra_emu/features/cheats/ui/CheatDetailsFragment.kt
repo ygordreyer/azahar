@@ -1,6 +1,6 @@
 // Copyright 2023-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 package org.citra.citra_emu.features.cheats.ui
 
@@ -140,6 +140,7 @@ class CheatDetailsFragment : Fragment() {
     private fun onSelectedCheatUpdated(cheat: Cheat?) {
         clearEditErrors()
         val isEditing: Boolean = cheatsViewModel.isEditing.value == true
+        binding.root.visibility = if (cheat == null && !isEditing) View.GONE else View.VISIBLE
 
         // If the fragment was recreated while editing a cheat, it's vital that we
         // don't repopulate the fields, otherwise the user's changes will be lost
