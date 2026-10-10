@@ -562,8 +562,8 @@ class GameAdapter(
         GameIconUtils.loadGameIcon(activity, game, bottomSheetView.findViewById(R.id.game_icon))
 
         bottomSheetView.findViewById<MaterialButton>(R.id.about_game_play).setOnClickListener {
-            val action = HomeNavigationDirections.actionGlobalEmulationActivity(holder.game)
-            view.findNavController().navigate(action)
+            bottomSheetDialog.dismiss()
+            onClick(view)
         }
 
         bottomSheetView.findViewById<TextView>(R.id.about_game_playtime).text =
