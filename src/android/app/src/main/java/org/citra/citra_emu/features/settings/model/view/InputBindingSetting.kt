@@ -1,6 +1,6 @@
 // Copyright 2023-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 package org.citra.citra_emu.features.settings.model.view
 
@@ -132,6 +132,20 @@ class InputBindingSetting(val abstractSetting: AbstractSetting, titleId: Int) :
             }
 
     /**
+     * Returns the guest button code written for an axis binding of this setting.
+     */
+    private val axisGuestButton: Int
+        get() = if (isCirclePad()) {
+            NativeLibrary.ButtonType.STICK_LEFT
+        } else if (isCStick()) {
+            NativeLibrary.ButtonType.STICK_C
+        } else if (isDPad()) {
+            NativeLibrary.ButtonType.DPAD
+        } else {
+            buttonCode
+        }
+
+    /**
      * Returns the key used to lookup the reverse mapping for this key, which is used to cleanup old
      * settings on re-mapping or clearing of a setting.
      */
@@ -157,12 +171,20 @@ class InputBindingSetting(val abstractSetting: AbstractSetting, titleId: Int) :
         val oldKey = preferences.getString(reverseKey, "")
         if (oldKey != "") {
             (setting as AbstractStringSetting).string = ""
-            preferences.edit()
+            val editor = preferences.edit()
                 .remove(abstractSetting.key) // Used for ui text
-                .remove(oldKey + "_GuestOrientation") // Used for axis orientation
-                .remove(oldKey + "_GuestButton") // Used for axis button
-                .remove(oldKey + "_Inverted") // used for axis inversion
                 .remove(reverseKey)
+            // Another setting may have been bound to this axis since, so only remove it if ours
+            val orientation = if (isHorizontalOrientation()) 0 else 1
+            if (
+                preferences.getInt(oldKey + "_GuestButton", -1) == axisGuestButton &&
+                preferences.getInt(oldKey + "_GuestOrientation", -1) == orientation
+            ) {
+                editor.remove(oldKey + "_GuestOrientation") // Used for axis orientation
+                    .remove(oldKey + "_GuestButton") // Used for axis button
+                    .remove(oldKey + "_Inverted") // used for axis inversion
+            }
+            editor.apply()
             val buttonCodes = try {
                 preferences.getStringSet(oldKey, mutableSetOf<String>())!!.toMutableSet()
             } catch (e: ClassCastException) {
@@ -242,18 +264,9 @@ class InputBindingSetting(val abstractSetting: AbstractSetting, titleId: Int) :
             Toast.makeText(context, R.string.input_message_button_only, Toast.LENGTH_LONG).show()
             return
         }
-        val button = if (isCirclePad()) {
-            NativeLibrary.ButtonType.STICK_LEFT
-        } else if (isCStick()) {
-            NativeLibrary.ButtonType.STICK_C
-        } else if (isDPad()) {
-            NativeLibrary.ButtonType.DPAD
-        } else {
-            buttonCode
-        }
         // use UP (-) to map vertical, but use RIGHT (+) to map horizontal
         val inverted = if (isHorizontalOrientation()) axisDir == '-' else axisDir == '+'
-        writeAxisMapping(motionRange.axis, button, inverted)
+        writeAxisMapping(motionRange.axis, axisGuestButton, inverted)
         value = "Axis ${motionRange.axis}$axisDir"
     }
 
