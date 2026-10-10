@@ -1,6 +1,6 @@
 // Copyright 2023-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 package org.citra.citra_emu.features.settings.ui
 
@@ -204,8 +204,10 @@ class SettingsAdapter(private val fragmentView: SettingsFragmentView, public val
                     }
 
                     SettingsItem.TYPE_STRING_SINGLE_CHOICE -> {
-                        (oldItem as StringSingleChoiceSetting).isEnabled ==
-                            (newItem as StringSingleChoiceSetting).isEnabled
+                        val oldSetting = oldItem as StringSingleChoiceSetting
+                        val newSetting = newItem as StringSingleChoiceSetting
+                        oldSetting.isEnabled == newSetting.isEnabled &&
+                            oldSetting.choices.contentEquals(newSetting.choices)
                     }
 
                     SettingsItem.TYPE_STRING_INPUT -> {
