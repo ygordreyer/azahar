@@ -1,6 +1,6 @@
 // Copyright 2023-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 package org.citra.citra_emu.fragments
 
@@ -1347,6 +1347,9 @@ class EmulationFragment :
             .setNegativeButton(android.R.string.cancel) { _: DialogInterface?, _: Int ->
                 setControlScale(previousProgress, target)
             }
+            .setOnCancelListener {
+                setControlScale(previousProgress, target)
+            }
             .setPositiveButton(android.R.string.ok) { _: DialogInterface?, _: Int ->
                 setControlScale(sliderBinding.slider.value.toInt(), target)
             }
@@ -1397,6 +1400,9 @@ class EmulationFragment :
             .setTitle(R.string.emulation_control_opacity)
             .setView(sliderBinding.root)
             .setNegativeButton(android.R.string.cancel) { _: DialogInterface?, _: Int ->
+                setControlOpacity(previousProgress)
+            }
+            .setOnCancelListener {
                 setControlOpacity(previousProgress)
             }
             .setPositiveButton(android.R.string.ok) { _: DialogInterface?, _: Int ->
