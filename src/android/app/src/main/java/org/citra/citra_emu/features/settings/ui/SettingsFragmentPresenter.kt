@@ -719,7 +719,7 @@ class SettingsFragmentPresenter(
                     R.string.image_flip,
                     0,
                     R.array.cameraFlipNames,
-                    R.array.cameraDeviceValues,
+                    R.array.cameraFlipValues,
                     IntSetting.CAMERA_INNER_FLIP.key,
                     IntSetting.CAMERA_INNER_FLIP.defaultValue
                 )
@@ -759,7 +759,7 @@ class SettingsFragmentPresenter(
                     R.string.image_flip,
                     0,
                     R.array.cameraFlipNames,
-                    R.array.cameraDeviceValues,
+                    R.array.cameraFlipValues,
                     IntSetting.CAMERA_OUTER_LEFT_FLIP.key,
                     IntSetting.CAMERA_OUTER_LEFT_FLIP.defaultValue
                 )
@@ -799,7 +799,7 @@ class SettingsFragmentPresenter(
                     R.string.image_flip,
                     0,
                     R.array.cameraFlipNames,
-                    R.array.cameraDeviceValues,
+                    R.array.cameraFlipValues,
                     IntSetting.CAMERA_OUTER_RIGHT_FLIP.key,
                     IntSetting.CAMERA_OUTER_RIGHT_FLIP.defaultValue
                 )
