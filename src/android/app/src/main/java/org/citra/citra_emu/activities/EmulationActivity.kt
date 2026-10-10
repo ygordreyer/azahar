@@ -420,6 +420,9 @@ class EmulationActivity : AppCompatActivity() {
         val axisValuesCirclePad = floatArrayOf(0.0f, 0.0f)
         val axisValuesCStick = floatArrayOf(0.0f, 0.0f)
         val axisValuesDPad = floatArrayOf(0.0f, 0.0f)
+        val isDPadMapped = booleanArrayOf(false, false)
+        var isCirclePadMapped = false
+        var isCStickMapped = false
         var isTriggerPressedLMapped = false
         var isTriggerPressedRMapped = false
         var isTriggerPressedZLMapped = false
@@ -452,14 +455,17 @@ class EmulationActivity : AppCompatActivity() {
 
             when (nextMapping) {
                 NativeLibrary.ButtonType.STICK_LEFT -> {
+                    isCirclePadMapped = true
                     axisValuesCirclePad[guestOrientation] = value
                 }
 
                 NativeLibrary.ButtonType.STICK_C -> {
+                    isCStickMapped = true
                     axisValuesCStick[guestOrientation] = value
                 }
 
                 NativeLibrary.ButtonType.DPAD -> {
+                    isDPadMapped[guestOrientation] = true
                     axisValuesDPad[guestOrientation] = value
                 }
 
@@ -486,18 +492,22 @@ class EmulationActivity : AppCompatActivity() {
         }
 
         // Circle-Pad and C-Stick status
-        NativeLibrary.onGamePadMoveEvent(
-            input.descriptor,
-            NativeLibrary.ButtonType.STICK_LEFT,
-            axisValuesCirclePad[0],
-            axisValuesCirclePad[1]
-        )
-        NativeLibrary.onGamePadMoveEvent(
-            input.descriptor,
-            NativeLibrary.ButtonType.STICK_C,
-            axisValuesCStick[0],
-            axisValuesCStick[1]
-        )
+        if (isCirclePadMapped) {
+            NativeLibrary.onGamePadMoveEvent(
+                input.descriptor,
+                NativeLibrary.ButtonType.STICK_LEFT,
+                axisValuesCirclePad[0],
+                axisValuesCirclePad[1]
+            )
+        }
+        if (isCStickMapped) {
+            NativeLibrary.onGamePadMoveEvent(
+                input.descriptor,
+                NativeLibrary.ButtonType.STICK_C,
+                axisValuesCStick[0],
+                axisValuesCStick[1]
+            )
+        }
 
         // Triggers L/R and ZL/ZR
         if (isTriggerPressedLMapped) {
@@ -546,7 +556,7 @@ class EmulationActivity : AppCompatActivity() {
         }
 
         // Work-around to allow D-pad axis to be bound to emulated buttons
-        if (axisValuesDPad[0] == 0f) {
+        if (isDPadMapped[0] && axisValuesDPad[0] == 0f) {
             NativeLibrary.onGamePadEvent(
                 NativeLibrary.TOUCHSCREEN_DEVICE,
                 NativeLibrary.ButtonType.DPAD_LEFT,
@@ -558,7 +568,7 @@ class EmulationActivity : AppCompatActivity() {
                 NativeLibrary.ButtonState.RELEASED
             )
         }
-        if (axisValuesDPad[0] < 0f) {
+        if (isDPadMapped[0] && axisValuesDPad[0] < 0f) {
             NativeLibrary.onGamePadEvent(
                 NativeLibrary.TOUCHSCREEN_DEVICE,
                 NativeLibrary.ButtonType.DPAD_LEFT,
@@ -570,7 +580,7 @@ class EmulationActivity : AppCompatActivity() {
                 NativeLibrary.ButtonState.RELEASED
             )
         }
-        if (axisValuesDPad[0] > 0f) {
+        if (isDPadMapped[0] && axisValuesDPad[0] > 0f) {
             NativeLibrary.onGamePadEvent(
                 NativeLibrary.TOUCHSCREEN_DEVICE,
                 NativeLibrary.ButtonType.DPAD_LEFT,
@@ -582,7 +592,7 @@ class EmulationActivity : AppCompatActivity() {
                 NativeLibrary.ButtonState.PRESSED
             )
         }
-        if (axisValuesDPad[1] == 0f) {
+        if (isDPadMapped[1] && axisValuesDPad[1] == 0f) {
             NativeLibrary.onGamePadEvent(
                 NativeLibrary.TOUCHSCREEN_DEVICE,
                 NativeLibrary.ButtonType.DPAD_UP,
@@ -594,7 +604,7 @@ class EmulationActivity : AppCompatActivity() {
                 NativeLibrary.ButtonState.RELEASED
             )
         }
-        if (axisValuesDPad[1] < 0f) {
+        if (isDPadMapped[1] && axisValuesDPad[1] < 0f) {
             NativeLibrary.onGamePadEvent(
                 NativeLibrary.TOUCHSCREEN_DEVICE,
                 NativeLibrary.ButtonType.DPAD_UP,
@@ -606,7 +616,7 @@ class EmulationActivity : AppCompatActivity() {
                 NativeLibrary.ButtonState.RELEASED
             )
         }
-        if (axisValuesDPad[1] > 0f) {
+        if (isDPadMapped[1] && axisValuesDPad[1] > 0f) {
             NativeLibrary.onGamePadEvent(
                 NativeLibrary.TOUCHSCREEN_DEVICE,
                 NativeLibrary.ButtonType.DPAD_UP,
