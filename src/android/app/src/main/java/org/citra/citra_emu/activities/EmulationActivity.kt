@@ -120,6 +120,8 @@ class EmulationActivity : AppCompatActivity() {
             return
         }
 
+        Log.gameLaunched = true
+
         settingsViewModel.settings.loadSettings()
 
         screenAdjustmentUtil = ScreenAdjustmentUtil(this, windowManager, settingsViewModel.settings)
