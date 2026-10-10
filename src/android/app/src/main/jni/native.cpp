@@ -98,6 +98,7 @@ jlong ptm_current_title_id = std::numeric_limits<jlong>::max(); // Arbitrary def
 
 std::atomic<bool> stop_run{true};
 std::atomic<bool> pause_emulation{false};
+std::atomic<bool> state_request{false};
 
 std::mutex paused_mutex;
 std::mutex running_mutex;
@@ -379,8 +380,35 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
             SCOPE_EXIT({ Settings::values.volume = volume; });
             Settings::values.volume = 0;
 
+            if (state_request.exchange(false) || system.IsSaveStateRequestPending()) {
+                // Process save and load state requests without unpausing. A request can be held
+                // back by pending async operations, which only complete while the game runs.
+                auto result = Core::System::ResultStatus::Success;
+                do {
+                    result = system.RunLoop();
+                } while (result == Core::System::ResultStatus::Success &&
+                         system.IsSaveStateRequestPending() && pause_emulation && !stop_run);
+                // Loading a state recreates the motion device with its sensors enabled
+                auto* handler = InputManager::NDKMotionHandler();
+                if (handler) {
+                    handler->DisableSensors();
+                    if (!pause_emulation) {
+                        handler->EnableSensors();
+                    }
+                }
+                if (result == Core::System::ResultStatus::ShutdownRequested) {
+                    return result;
+                }
+                if (result != Core::System::ResultStatus::Success &&
+                    !HandleCoreError(result, system.GetStatusDetails())) {
+                    return Core::System::ResultStatus::ShutdownRequested;
+                }
+                continue;
+            }
+
             std::unique_lock pause_lock{paused_mutex};
-            running_cv.wait(pause_lock, [] { return !pause_emulation || stop_run; });
+            running_cv.wait(pause_lock,
+                            [] { return !pause_emulation || stop_run || state_request; });
             window->PollEvents();
         }
     }
@@ -1228,14 +1256,27 @@ jobjectArray Java_org_citra_citra_1emu_NativeLibrary_getSavestateInfo(
     return array;
 }
 
+static void WakeForStateRequest() {
+    if (!pause_emulation) {
+        return;
+    }
+    {
+        std::scoped_lock lock{paused_mutex};
+        state_request = true;
+    }
+    running_cv.notify_all();
+}
+
 void Java_org_citra_citra_1emu_NativeLibrary_saveState([[maybe_unused]] JNIEnv* env,
                                                        [[maybe_unused]] jobject obj, jint slot) {
     Core::System::GetInstance().SendSignal(Core::System::Signal::Save, slot);
+    WakeForStateRequest();
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_loadState([[maybe_unused]] JNIEnv* env,
                                                        [[maybe_unused]] jobject obj, jint slot) {
     Core::System::GetInstance().SendSignal(Core::System::Signal::Load, slot);
+    WakeForStateRequest();
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_logDeviceInfo([[maybe_unused]] JNIEnv* env,

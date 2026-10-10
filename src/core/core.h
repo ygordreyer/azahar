@@ -389,6 +389,11 @@ public:
         return save_state_status;
     }
 
+    /// Returns true while a save or load state request has not been processed yet
+    bool IsSaveStateRequestPending() const {
+        return save_state_request_status != SaveStateStatus::NONE;
+    }
+
     void SaveState(u32 slot) const;
 
     void LoadState(u32 slot);
