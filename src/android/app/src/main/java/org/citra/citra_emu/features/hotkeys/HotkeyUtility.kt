@@ -1,6 +1,6 @@
 // Copyright 2023-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 package org.citra.citra_emu.features.hotkeys
 
@@ -126,10 +126,15 @@ class HotkeyUtility(
             Hotkey.TURBO_LIMIT.button -> TurboHelper.toggleTurbo(true)
 
             Hotkey.QUICKSAVE.button -> {
-                NativeLibrary.saveState(NativeLibrary.QUICKSAVE_SLOT)
+                val stringRes = if (NativeLibrary.getSavestateInfo() != null) {
+                    NativeLibrary.saveState(NativeLibrary.QUICKSAVE_SLOT)
+                    R.string.saving
+                } else {
+                    R.string.core_error_savestate
+                }
                 Toast.makeText(
                     context,
-                    context.getString(R.string.saving),
+                    context.getString(stringRes),
                     Toast.LENGTH_SHORT
                 ).show()
             }
