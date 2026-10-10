@@ -1,6 +1,6 @@
 // Copyright 2014-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 #include <cmath>
 #include <mutex>
@@ -261,7 +261,7 @@ void EmuWindow::UpdateCurrentFramebufferLayout(u32 width, u32 height, bool is_po
     }
     UpdateMinimumWindowSize(min_size);
 
-    if (Settings::values.render_3d.GetValue() == Settings::StereoRenderOption::CardboardVR) {
+    if (stereo_option == Settings::StereoRenderOption::CardboardVR) {
         layout = Layout::GetCardboardSettings(layout);
     }
     layout.render_3d_mode = stereo_option;
