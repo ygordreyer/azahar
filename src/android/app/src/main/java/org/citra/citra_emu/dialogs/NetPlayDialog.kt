@@ -1,6 +1,6 @@
 // Copyright 2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 // Copyright 2024 Mandarine Project
 // Licensed under GPLv2 or any later version
@@ -423,7 +423,7 @@ class NetPlayDialog(context: Context) : BottomSheetDialog(context) {
                 return@setOnClickListener
             }
 
-            if (ipAddress.length < 7 || username.length < 5) {
+            if (ipAddress.length < 7 || username.length < 4) {
                 Toast.makeText(activity, R.string.multiplayer_input_invalid, Toast.LENGTH_LONG)
                     .show()
                 binding.btnConfirm.isEnabled = true
