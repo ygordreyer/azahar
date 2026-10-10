@@ -88,9 +88,7 @@ class GameAdapter(
     fun handleShortcutImageResult(uri: Uri?) {
         val path = uri?.toString()
         if (path != null) {
-            imagePath = path
-            dialogShortcutBinding!!.imageScaleSwitch.isEnabled = imagePath != null
-            refreshShortcutDialogIcon()
+            refreshShortcutDialogIcon(path)
         }
     }
 
@@ -770,13 +768,13 @@ class GameAdapter(
         bottomSheetDialog.show()
     }
 
-    private fun refreshShortcutDialogIcon() {
-        if (imagePath != null) {
+    private fun refreshShortcutDialogIcon(path: String? = imagePath) {
+        if (path != null) {
             val originalBitmap = BitmapFactory.decodeStream(
                 CitraApplication.appContext.contentResolver.openInputStream(
-                    imagePath!!.toUri()
+                    path.toUri()
                 )
-            )
+            ) ?: return
             val scaledBitmap = {
                 val preferences =
                     PreferenceManager.getDefaultSharedPreferences(CitraApplication.appContext)
@@ -808,6 +806,8 @@ class GameAdapter(
                 }
             }()
             dialogShortcutBinding!!.shortcutIcon.setImageBitmap(scaledBitmap)
+            imagePath = path
+            dialogShortcutBinding!!.imageScaleSwitch.isEnabled = true
         }
     }
 
