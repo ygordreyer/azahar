@@ -1,6 +1,6 @@
 // Copyright 2023-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 package org.citra.citra_emu.features.settings.ui
 
@@ -752,7 +752,7 @@ class SettingsFragmentPresenter(private val fragmentView: SettingsFragmentView) 
                     R.string.image_flip,
                     0,
                     R.array.cameraFlipNames,
-                    R.array.cameraDeviceValues,
+                    R.array.cameraFlipValues,
                     IntSetting.CAMERA_INNER_FLIP.key,
                     IntSetting.CAMERA_INNER_FLIP.defaultValue
                 )
@@ -789,7 +789,7 @@ class SettingsFragmentPresenter(private val fragmentView: SettingsFragmentView) 
                     R.string.image_flip,
                     0,
                     R.array.cameraFlipNames,
-                    R.array.cameraDeviceValues,
+                    R.array.cameraFlipValues,
                     IntSetting.CAMERA_OUTER_LEFT_FLIP.key,
                     IntSetting.CAMERA_OUTER_LEFT_FLIP.defaultValue
                 )
@@ -826,7 +826,7 @@ class SettingsFragmentPresenter(private val fragmentView: SettingsFragmentView) 
                     R.string.image_flip,
                     0,
                     R.array.cameraFlipNames,
-                    R.array.cameraDeviceValues,
+                    R.array.cameraFlipValues,
                     IntSetting.CAMERA_OUTER_RIGHT_FLIP.key,
                     IntSetting.CAMERA_OUTER_RIGHT_FLIP.defaultValue
                 )
