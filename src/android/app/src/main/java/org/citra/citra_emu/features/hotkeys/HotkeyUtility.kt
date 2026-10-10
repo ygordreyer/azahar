@@ -1,6 +1,6 @@
 // Copyright 2023-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 package org.citra.citra_emu.features.hotkeys
 
@@ -41,13 +41,14 @@ class HotkeyUtility(
 
         // Now process all internal buttons associated with this keypress
         for (button in buttonSet) {
-            currentlyPressedButtons.add(button)
             // option 1 - this is the enable command, which was already handled
             if (button == Hotkey.ENABLE.button) {
+                currentlyPressedButtons.add(button)
                 handled = true
             }
             // option 2 - this is a different hotkey command
             else if (hotkeyButtons.contains(button)) {
+                currentlyPressedButtons.add(button)
                 if (hotkeyIsEnabled) {
                     handled = handleHotkey(button) || handled
                 }
@@ -57,6 +58,7 @@ class HotkeyUtility(
                 // if this key press is ALSO associated with a hotkey that will process, skip
                 // the normal key event.
                 if (!thisKeyIsHotkey || !hotkeyIsEnabled) {
+                    currentlyPressedButtons.add(button)
                     handled = NativeLibrary.onGamePadEvent(
                         keyEvent.device.descriptor,
                         button,
@@ -73,8 +75,6 @@ class HotkeyUtility(
         val buttonSet = InputBindingSetting.getButtonSet(keyEvent)
         val thisKeyIsEnableButton = buttonSet.contains(Hotkey.ENABLE.button)
         val thisKeyIsComboButton = buttonSet.contains(Hotkey.COMBO_BUTTON.button)
-        val thisKeyIsHotkey =
-            !thisKeyIsEnableButton && Hotkey.entries.any { buttonSet.contains(it.button) }
         if (thisKeyIsEnableButton) {
             handled = true
             hotkeyIsEnabled = false
@@ -93,14 +93,9 @@ class HotkeyUtility(
                     hotkeyIsPressed = false
                 }
             } else {
-                // if this key ALSO sends a hotkey command that we already/will handle,
-                // or if we did not register the press of this button, e.g. if this key
-                // was also a hotkey pressed after enable, but released after enable button release, then
-                // skip the normal key event
-                if ((!thisKeyIsHotkey || !hotkeyIsEnabled) && currentlyPressedButtons.contains(
-                        button
-                    )
-                ) {
+                // release every normal key whose press reached the game, even if the enable
+                // button went down while it was held, or it stays pressed in the game
+                if (currentlyPressedButtons.contains(button)) {
                     handled = NativeLibrary.onGamePadEvent(
                         keyEvent.device.descriptor,
                         button,
