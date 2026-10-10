@@ -1,6 +1,6 @@
 // Copyright 2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 // Copyright 2024 Mandarine Project
 // Licensed under GPLv2 or any later version
@@ -409,7 +409,7 @@ class NetPlayDialog(context: Context) : BottomSheetDialog(context) {
                 Toast.makeText(activity, R.string.multiplayer_port_invalid, Toast.LENGTH_LONG)
                     .show()
                 binding.btnConfirm.isEnabled = true
-                binding.btnConfirm.text = activity.getString(R.string.original_button_text)
+                binding.btnConfirm.text = activity.getString(android.R.string.ok)
                 return@setOnClickListener
             }
             val roomName = binding.roomName.text.toString()
@@ -419,7 +419,7 @@ class NetPlayDialog(context: Context) : BottomSheetDialog(context) {
                 Toast.makeText(activity, R.string.multiplayer_room_name_invalid, Toast.LENGTH_LONG)
                     .show()
                 binding.btnConfirm.isEnabled = true
-                binding.btnConfirm.text = activity.getString(R.string.original_button_text)
+                binding.btnConfirm.text = activity.getString(android.R.string.ok)
                 return@setOnClickListener
             }
 
@@ -427,7 +427,7 @@ class NetPlayDialog(context: Context) : BottomSheetDialog(context) {
                 Toast.makeText(activity, R.string.multiplayer_input_invalid, Toast.LENGTH_LONG)
                     .show()
                 binding.btnConfirm.isEnabled = true
-                binding.btnConfirm.text = activity.getString(R.string.original_button_text)
+                binding.btnConfirm.text = activity.getString(android.R.string.ok)
             } else {
                 Handler(Looper.getMainLooper()).post {
                     val result = if (isCreateRoom) {
@@ -465,7 +465,7 @@ class NetPlayDialog(context: Context) : BottomSheetDialog(context) {
                             Toast.LENGTH_LONG
                         ).show()
                         binding.btnConfirm.isEnabled = true
-                        binding.btnConfirm.text = activity.getString(R.string.original_button_text)
+                        binding.btnConfirm.text = activity.getString(android.R.string.ok)
                     }
                 }
             }
