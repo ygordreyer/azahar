@@ -394,7 +394,7 @@ class SettingsAdapter(val fragmentView: SettingsFragmentView, val context: Conte
                     }
                 } else {
                     val currentText = textSliderValue?.text.toString()
-                    val currentTextValue = currentText.toFloat()
+                    val currentTextValue = currentText.toFloatOrNull()
                     if (currentTextValue != sliderProgress) {
                         textSliderValue?.setText(sliderString)
                         textSliderValue?.setSelection(textSliderValue?.length() ?: 0)
