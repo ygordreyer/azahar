@@ -1,6 +1,6 @@
 // Copyright 2023-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 package org.citra.citra_emu.features.settings.ui
 
@@ -65,7 +65,7 @@ class SettingsActivityPresenter(private val activityView: SettingsActivityView) 
         loadSettingsUI()
     }
 
-    private fun updateAndroidImageVisibility() {
+    fun updateAndroidImageVisibility() {
         val dataDirTreeUri: Uri
         val dataDirDocument: DocumentFile
         val nomediaFileDocument: DocumentFile?
