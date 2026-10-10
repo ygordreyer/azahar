@@ -184,10 +184,12 @@ class SearchFragment : Fragment() {
         if (binding.searchText.text.toString().isEmpty() &&
             binding.chipGroup.checkedChipId == View.NO_ID
         ) {
+            binding.noticeText.setText(R.string.search_and_filter_games)
             gamesViewModel.setSearchedGames(emptyList())
             return
         }
 
+        binding.noticeText.setText(R.string.multiplayer_no_game)
         val baseList = gamesViewModel.games.value
         val filteredList: List<Game> = when (binding.chipGroup.checkedChipId) {
             R.id.chip_recently_played -> {
