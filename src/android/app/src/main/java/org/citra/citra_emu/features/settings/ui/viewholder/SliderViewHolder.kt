@@ -1,10 +1,11 @@
 // Copyright 2023-2026 Citra Emulator Project / Azahar Emulator Project
-// Licensed under GPLv2 or any later version
-// Refer to the misc/licenses/gplv2.txt file included.
+// Licensed under GPLv3 or any later version
+// Refer to the LICENSE.txt file included.
 
 package org.citra.citra_emu.features.settings.ui.viewholder
 
 import android.view.View
+import kotlin.math.roundToInt
 import org.citra.citra_emu.databinding.ListItemSettingBinding
 import org.citra.citra_emu.features.settings.model.AbstractFloatSetting
 import org.citra.citra_emu.features.settings.model.AbstractIntSetting
@@ -30,7 +31,7 @@ class SliderViewHolder(val binding: ListItemSettingBinding, adapter: SettingsAda
         binding.textSettingValue.visibility = View.VISIBLE
         binding.textSettingValue.text = when (setting.setting) {
             is ScaledFloatSetting ->
-                "${(setting.setting as ScaledFloatSetting).float.toInt()}${setting.units}"
+                "${(setting.setting as ScaledFloatSetting).float.roundToInt()}${setting.units}"
 
             is FloatSetting -> "${(setting.setting as AbstractFloatSetting).float}${setting.units}"
 
