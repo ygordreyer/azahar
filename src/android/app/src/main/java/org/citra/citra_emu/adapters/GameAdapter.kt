@@ -636,7 +636,7 @@ class GameAdapter(
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val icon = Icon.createWithBitmap(iconBitmap)
-                        val shortcut = ShortcutInfo.Builder(context, shortcutName)
+                        val shortcut = ShortcutInfo.Builder(context, "${game.path}:$shortcutName")
                             .setShortLabel(shortcutName)
                             .setIcon(icon)
                             .setIntent(
