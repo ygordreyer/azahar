@@ -195,6 +195,7 @@ class EmulationFragment :
             NativeLibrary.playTimeManagerStart(game.titleId)
         }
 
+        Log.gameLaunched = true
         Log.info("[EmulationFragment] Starting application " + game.path)
 
         // So this fragment doesn't restart on configuration changes; i.e. rotation.
