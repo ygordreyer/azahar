@@ -362,6 +362,10 @@ class EmulationActivity : AppCompatActivity() {
         }
 
         if (emulationFragment.isDrawerOpen()) {
+            // Still release buttons that were pressed before the drawer opened
+            if (event.action == KeyEvent.ACTION_UP) {
+                hotkeyUtility.handleKeyRelease(event)
+            }
             return super.dispatchKeyEvent(event)
         }
 
