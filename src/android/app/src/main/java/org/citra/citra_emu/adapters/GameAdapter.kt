@@ -136,6 +136,7 @@ class GameAdapter(
                         IntSetting.TEXTURE_FILTER,
                         SettingsFile.FILE_NAME_CONFIG
                     )
+                    lastClickTime = 0L
                     this.onClick(view)
                 }
                 .setNegativeButton(android.R.string.cancel, null)
