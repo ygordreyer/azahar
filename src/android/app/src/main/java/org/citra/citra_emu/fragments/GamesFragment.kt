@@ -205,7 +205,12 @@ class GamesFragment : Fragment() {
                 repeatOnLifecycle(Lifecycle.State.RESUMED) {
                     gamesViewModel.isReloading.collect { isReloading ->
                         binding.swipeRefresh.isRefreshing = isReloading
-                        if (gamesViewModel.games.value.isEmpty() && !isReloading) {
+                        val showHomeApps = PreferenceManager
+                            .getDefaultSharedPreferences(CitraApplication.appContext)
+                            .getBoolean(Settings.PREF_SHOW_HOME_APPS, false)
+                        val noVisibleGames =
+                            gamesViewModel.games.value.none { showHomeApps || !it.isSystemTitle }
+                        if (noVisibleGames && !isReloading) {
                             binding.noticeText.visibility = View.VISIBLE
                         } else {
                             binding.noticeText.visibility = View.INVISIBLE
