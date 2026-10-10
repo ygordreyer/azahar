@@ -1266,7 +1266,11 @@ void Java_org_citra_citra_1emu_NativeLibrary_disableTemporaryFrameLimit(JNIEnv* 
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_playTimeManagerInit(JNIEnv* env, jobject obj) {
-    play_time_manager = std::make_unique<PlayTime::PlayTimeManager>();
+    if (play_time_manager) {
+        play_time_manager->Reload();
+    } else {
+        play_time_manager = std::make_unique<PlayTime::PlayTimeManager>();
+    }
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_playTimeManagerStart(JNIEnv* env, jobject obj,
