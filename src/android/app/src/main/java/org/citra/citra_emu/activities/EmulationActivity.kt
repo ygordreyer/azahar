@@ -189,11 +189,13 @@ class EmulationActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         val launchUri = getLaunchUri(intent)
-        if (launchUri != null && launchUri != Uri.EMPTY && launchUri == getLaunchUri(this.intent)) {
+        val isRunningGame =
+            launchUri != null && launchUri != Uri.EMPTY && launchUri == getLaunchUri(this.intent)
+        setIntent(intent)
+        if (isRunningGame) {
             Log.info("[EmulationActivity] Ignoring relaunch of the running game")
             return
         }
-        setIntent(intent)
 
         NativeLibrary.stopEmulation()
         NativeLibrary.playTimeManagerStop()
